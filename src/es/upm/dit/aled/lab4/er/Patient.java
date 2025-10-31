@@ -131,8 +131,27 @@ public class Patient extends Thread {
 	 */
 	private void advanceProtocol() {
 		// TODO
-	}
+		//El protocolo tiene los pasos que debe seguir el paciente y esta formado por objetos transfer
+		//Los transfer tienen el siguiente area y el tiempo que pasan los pacientes en el area
+		//Con la clase Transfer podemos mover al paciente a ese area
+		
+		//El paso en el que estoy me dice el area destino
+		Transfer alSiguienteArea= this.protocol.get(this.indexProtocol); 
+		
+		//Debo actualizar la location, la nueva sera el area "to"
+		this.location = alSiguienteArea.getTo();
 
+		//Debo actualizar la posicion de mi lista de transfers para poder luego avanzar al siguiente
+		this.indexProtocol ++;
+		
+		//Ahora debo simular usando GUI para ver el paciente moverse
+		//Quien lo dibuja es animateTransfer(Paciente p, Transfer t)-> es ESTE paciente-> this 
+		//y el transfer será el que toca ahora-> alSiguienteAre
+		
+		//No puedo poner: EmergencyRoomGUI.animateTransfer(this, alSiguienteArea);
+		//Como animateTansfer 
+	}
+ 
 	/**
 	 * Simulates the treatment of the Patient at its current location. Therefore,
 	 * the Patient must spend at this method the amount of time specified in such
@@ -140,6 +159,11 @@ public class Patient extends Thread {
 	 */
 	private void attendedAtLocation() {
 		// TODO
+		try{
+			sleep(this.location.getTime());
+		}catch(InterruptedException e){
+			
+		}
 	}
 
 	/**
