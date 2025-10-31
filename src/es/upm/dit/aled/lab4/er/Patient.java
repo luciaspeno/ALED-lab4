@@ -149,7 +149,13 @@ public class Patient extends Thread {
 		//y el transfer será el que toca ahora-> alSiguienteAre
 		
 		//No puedo poner: EmergencyRoomGUI.animateTransfer(this, alSiguienteArea);
-		//Como animateTansfer 
+		//Como animateTansfer no es estático necesita un objeto para ser llamado ¿Quien es ese objeto?
+		//EmergencyRoomGUI.getInstance() devuelve el único objeto real que es la ventana que vemos en pantalla.
+		EmergencyRoomGUI.getInstance().animateTransfer(this, alSiguienteArea);
+		
+		//Trazas: imprimimos de donde a donde se mueve el paciente para saberlo
+		System.out.println("Paciente " + number + " se mueve de " +
+							location.getName() + " a " + alSiguienteArea.getTo().getName());
 	}
  
 	/**
@@ -174,6 +180,32 @@ public class Patient extends Thread {
 	@Override
 	public void run() {
 		// TODO
+		
+	//Esta clase NO es una hebra sino es lo que HACE una hebra. Es decir, muchos pacientes realizan estas TAREAS
+	//CADA OBJETO PACIENTE SÍ ES UNA HEBRA
+	//Por tanto, el metodo run() lo hace las distintas hebras/pacientes
+	//Utiliza los métodos que scabamos de programar
+	
+		
+		do {
+			//Un paciente hace:
+			//1)Ser atendido en la ubicación actual: es decir el metodo attendedLocation()
+						//Este metodo bloquea al paciente el tiempo que sea necesario en ese area mientras es atendido
+			this.attendedAtLocation();
+			
+			//2)Avanzar al siguiente paso: método advanceProtocol()
+			this.advanceProtocol();
+		}while(indexProtocol<protocol.size());//3)Repetir el proceso hasta acabar la lista de tareas
+		
+		this.attendedAtLocation();	//cada trasnfer tiene el siguiente area donde es atendido pero falta el primero o el ultimo atendido
+
+		 
+		EmergencyRoomGUI.getInstance().removePatient(this);
+		
+		//Trazas
+		System.out.println ("El paciente: "+this.number+" ha terminado de ser atendido en "+ this.location.getName());
+		
+	
 	}
 
 }
